@@ -1,16 +1,18 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import {Card, Button,Icon} from "react-native-elements"
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import CardHome from './CardHome';
 
 export default function HomeScreen(props) {
+  const [isLoading,setLoading] = useState(true)
+  const [datos,setDatos] = useState([])
 
   const getInfo = async () => {
     try{
       const response = await
-      fetch('http://192.168.68.118:8080/cds/person/')
+      fetch('http://192.168.1.72:8080/cds/person/')
       const json = await response.json();
       setDatos(json)
     }catch(error){
@@ -24,7 +26,7 @@ export default function HomeScreen(props) {
   let i=0
   let informacion = []
   for(i in data){
-    proyectos.push(data[i])
+    informacion.push(data[i])
   }
 
 
@@ -50,7 +52,7 @@ export default function HomeScreen(props) {
                     direccion={informacion.phone}
           />
           <Card containerStyle={styles.card2}>
-              <Card.Title style={styles.cardTitle}  >Información académica</Card.Title>
+              <Card.Title style={styles.cardTitle} >Información académica</Card.Title>
               <Card.Divider/>
               <View style={styles.container}>
              </View>

@@ -11,7 +11,7 @@ export default function CardsProyects() {
   const getProyectos = async ()=>{
     try{
       const response = await
-      fetch('http://192.168.68.118:8080/cds/proyectos/')
+      fetch('http://192.168.1.72:8080/cds/proyectos/')
       const json = await response.json();
       setDatos(json)
     }catch(error){
@@ -24,9 +24,9 @@ export default function CardsProyects() {
   const {data}=datos
 
   let i=0
-  let proyectos = []
+  let proyecto = []
   for(i in data){
-    proyectos.push(data[i])
+    proyecto.push(data[i])
   }
 
 
@@ -41,7 +41,7 @@ export default function CardsProyects() {
         style={styles.background}
       />
       <ScrollView>
-        {proyectos.map((proyecto,i)=>{
+        {proyecto.map((proyecto,i)=>{
           return(
             <CardProject key={i} titulo={proyecto.name} description={proyecto.description}/>
           )

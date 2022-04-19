@@ -1,14 +1,17 @@
 import { LinearGradient } from "expo-linear-gradient";
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { StyleSheet, Text, View} from 'react-native';
 import { Button,Input,Icon } from "react-native-elements";
 import {Avatar} from 'react-native-elements'
 import { isEmpty } from "lodash";
 import TextoPerson from "./TextoPerson";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 
 export default function Perfil(props){
+  const { setReload, setExitsSession, navigation, toastRef } = props;
+  console.log("props en perfil", props);
   const [showPassword, setShowPassword] = useState(true);
   const [formData, setFormData] = useState({ password: "", passwordC: "" })
   const [error, setError] = useState({ password: "", passwordC: "" })
@@ -29,34 +32,18 @@ export default function Perfil(props){
         })
        
     }
-    const getInfo = async () => {
-      try{
-        const response = await
-        fetch('http://192.168.68.118:8080/cds/person/')
-        const json = await response.json();
-        setDatos(json)
-      }catch(error){
-        console.log("Error: "+error)
-      }finally{
-        setLoading(false)
-      }
-    }
-    const {data}=datos
-  
-    let i=0
-    let informacion = []
-    for(i in data){
-      proyectos.push(data[i])
-    }
-  
-  
-    useEffect(()=>{
-      getInfo()
-    },[])
+}
+const closeMylogin =  async () => {
+  try{
+    await AsyncStorage.removeItem("@session", "iwano")
+    setReload(false)
+  }catch(e){
+    console.log("err", e);
+  }
 }
 
+
   return(
-    
     <View style={styles.container} >
       <LinearGradient
               // Background Linear Gradient
@@ -70,13 +57,9 @@ export default function Perfil(props){
           containerStyle={{ backgroundColor: '#0368C0', marginTop:10}}
         >
         <Avatar.Accessory size={22} />
-
         </Avatar>
-
-        
-
         <View style={styles.view2}>
-           <TextoPerson key={i} nombre={informacion.name} email={informacion.email}/>
+              <TextoPerson/>
        </View>
 
        <View style={styles.view3}>
@@ -146,6 +129,7 @@ export default function Perfil(props){
             containerStyle={styles.btnContainer1}
             buttonStyle={styles.btn1}
             iconContainerStyle={{ marginRight: 20 }}
+            onPress={closeMylogin}
             
             />
        </View>

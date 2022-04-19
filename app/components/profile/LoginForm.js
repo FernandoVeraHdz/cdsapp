@@ -15,7 +15,8 @@ export default function LoginForm(props) {
     setFormData({ ...formData, [type]: event.nativeEvent.text });
   };
 
-  const login = () => {
+  const myLogin =  async () => {
+
     if (isEmpty(formData.email) || isEmpty(formData.password)) {
       setError({
         email: "Campo obligatorio",
@@ -27,38 +28,10 @@ export default function LoginForm(props) {
         password: "",
       });
       setShowPassword(true);
-
-      async function postData(url = "", data = {}) {
-        // Opciones por defecto estan marcadas con un *
-        const response = await fetch(url, {
-          method: "POST", // *GET, POST, PUT, DELETE, etc.
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow", // manual, *follow, error
-          referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data), // body data type must match "Content-Type" header
-        });
-        return response.json(); // parses JSON response into native JavaScript objects
-      }
-
-      postData("192.168.52.130:8080/api/auth/login", {
-        username: "20203tn032@utez.edu.mx",
-        password: "alex995410",
-      }).then((data) => {
-        console.log(data); // JSON data parsed by `data.json()` call
-      });
-
-      toastRef.current.show("Inicio correcto");
     }
-  };
 
-  const myLogin =  async () => {
     try{
-      await AsyncStorage.setItem("@session", "erick")
+      await AsyncStorage.setItem("@session", "iwano")
       setReload(true)
     }catch(e){
       console.log("err", e);

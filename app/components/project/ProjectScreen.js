@@ -7,12 +7,12 @@ import CardProjectos from "./CardProjectos";
 
 export default function ProjectScreen() {
   const [isLoading,setLoading] = useState(true)
-  const [dato,setData] = useState([])
+  const [datos,setDatos] = useState([])
 
-  const getProyecto = async ()=>{
+  const getProyectos = async ()=>{
     try{
       const response = await
-      fetch('http://192.168.68.118:8080/cds/proyectos/')
+      fetch('http://192.168.1.72:8080/cds/proyectos/')
       const json = await response.json();
       setDatos(json)
     }catch(error){
@@ -22,19 +22,20 @@ export default function ProjectScreen() {
     }
   }
 
-  const {data}=dato
+  const {data}=datos
 
   let i=0
-  let proyectos = []
+  let proyecto = []
   for(i in data){
-    proyectos.push(data[i])
+    proyecto.push(data[i])
   }
+  console.log(proyecto)
 
 
   useEffect(()=>{
     getProyectos()
   },[])
-  
+
   return (
     <View style={{flex: 1, justifyContent:"center", alignItems:"center"}}>
       <LinearGradient
@@ -42,7 +43,11 @@ export default function ProjectScreen() {
                 style={styles.background}
              />
       <ScrollView>
-        <CardProjectos key={i} titulo={proyecto.name} description={proyecto.description}/>
+      {proyecto.map((proyecto,i)=>{
+          return(
+            <CardProjectos key={i} titulo={proyecto.name} description={proyecto.description}/>
+          )
+        })}
       </ScrollView>
     </View>
   );

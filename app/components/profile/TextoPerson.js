@@ -4,8 +4,8 @@ import React from 'react'
 export default function TextoPerson(nombre,emailP) {
   return (
     <View>
-      <Text style={styles.text1}>{nombre}</Text>
-           <Text style={styles.text2}>{emailP}</Text>
+      <Text style={styles.text1}>David Begham</Text>
+           <Text style={styles.text2}>kkiceqp@gmail.com</Text>
     </View>
   )
 }
