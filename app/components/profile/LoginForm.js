@@ -16,7 +16,7 @@ export default function LoginForm({
   const change = (event, type) => {
     setFormData({ ...formData, [type]: event.nativeEvent.text });
   };
-  const url = "http://192.168.68.117:8080/cds/auth/login";
+  const url = "http://192.168.52.130:8080/cds/auth/login";
 
   const myLogin = async () => {
     if (isEmpty(formData.username) || isEmpty(formData.password)) {

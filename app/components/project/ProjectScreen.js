@@ -10,13 +10,12 @@ import { Text, Card, Button, Icon, SearchBar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import CardProjectos from "./CardProjectos";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Loading from "./Loading";
+import Loading from "../Loading";
 
 export default function ProjectScreen() {
   const [isLoading, setLoading] = useState(true);
   const [datos, setDatos] = useState([]);
   const [usuario, setUsuario] = useState({});
-
   const session = async () => {
     try {
       const usuario = await AsyncStorage.getItem("@session");
@@ -26,7 +25,6 @@ export default function ProjectScreen() {
         setUsuario(person);
       }
     } catch (error) {
-      
       console.log(error);
     } finally {
       getProyectos();
@@ -40,7 +38,7 @@ export default function ProjectScreen() {
 
   const getProyectos = async () => {
     try {
-      const response = await fetch("http://192.168.68.117:8080/cds/proyectos/");
+      const response = await fetch("http://192.168.52.130:8080/cds/proyectos/");
       const json = await response.json();
       setDatos(json.data);
     } catch (error) {

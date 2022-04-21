@@ -5,11 +5,12 @@ import { Card, Button, Icon } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-easy-toast";
 import CardHome from "./CardHome";
 import Loading from "../Loading";
 
 export default function HomeScreen(props) {
-  const toastRef = useRef()
+  const toastRef = useRef();
   const [loading, setLoading] = useState(true);
   const [datos, setDatos] = useState({});
   const [persona, setPersona] = useState({});
@@ -33,7 +34,7 @@ export default function HomeScreen(props) {
   const getInfo = async (id) => {
     try {
       const response = await fetch(
-        `http://192.168.68.117:8080/cds/person/` + id
+        `http://192.168.52.130:8080/cds/person/` + id
       );
       const respuesta = await response.json();
       const data = respuesta.data;
@@ -148,10 +149,7 @@ export default function HomeScreen(props) {
             />
           }
           onPress={() => navigation.navigate("webpdf")}
-          toastRef={toastRef} setLoading={setLoading}
         />
-        <Loading isVisible={loading} text="Descargando CV"/>
-        <Toast ref={toastRef} opacity={0.9} position="center" />
       </ScrollView>
     </View>
   );

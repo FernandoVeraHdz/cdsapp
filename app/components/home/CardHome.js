@@ -12,6 +12,15 @@ export default function CardHome({
   return (
     <Card containerStyle={styles.card}>
       <Card.Title style={styles.cardTitle}>Informacion personal</Card.Title>
+      <View style={styles.containerplus}>
+        <Button
+          style={styles.button}
+          containerStyle={styles.btnContainer}
+          buttonStyle={{ backgroundColor: "#0368C0" }}
+          icon={<Icon name="add" size={45} color="white" />}
+          onPress={() => navigation.navigate("skills", { perid: datos.id })}
+        />
+      </View>
       <View style={styles.container2}></View>
       <View style={styles.container}></View>
       <Text style={styles.styleText}>{nombre}</Text>

@@ -12,7 +12,7 @@ export default function CardProjectos({ titulo, description, idpro, idu }) {
   const sendProyecto = async () => {
     console.log("ENTRE A LA FUNCION");
     const url =
-      "http://192.168.68.117:8080/cds/person/" + idu + "/projects/" + idpro;
+      "http://192.168.52.130:8080/cds/person/" + idu + "/projects/" + idpro;
     console.log(`esta es la url:${url}`);
     try {
       const response = await fetch(url, {

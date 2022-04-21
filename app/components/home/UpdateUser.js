@@ -1,11 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React,{useState} from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Button,Input,Icon } from "react-native-elements";
-import { isEmpty } from "lodash";
-
-export default function Skills({ navigation, route }) {
+export default function UpdateUser({ navigation, route }) {
   const { perid } = route.params;
   const [formData, setFormData] = useState({ description: "" });
   const [error, setError] = useState({ description: "" });
@@ -47,16 +40,51 @@ export default function Skills({ navigation, route }) {
       />
 
       <View style={styles.view3}>
-        <Text style={styles.text3}>Agregar Habilidad</Text>
+        <Text style={styles.text3}>Actualizar Información</Text>
         <Input
           label="Nombre"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "name")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Apellido Paterno "
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "lastname")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Apellido Materno"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "description")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Correo Institucional"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "description")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Correo Personal"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "description")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Telefono"
           containerStyle={styles.containerInput}
           labelStyle={styles.labelInput}
           onChange={(event) => change(event, "description")}
           errorMessage={error.description}
         />
         <Button
-          title="Agregar"
+          title="Actualizar"
           containerStyle={styles.btnContainer}
           buttonStyle={styles.btn}
           icon={

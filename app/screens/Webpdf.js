@@ -20,7 +20,7 @@ export default function Webpdf() {
   }, []);
 
   const { id, name } = datos;
-  const url = "http://192.168.68.117:8080/cds/exportCv/" + id + "/pdf";
+  const url = "http://192.168.52.130:8080/cds/exportCv/" + id + "/pdf";
   return (
     <WebView
       source={{

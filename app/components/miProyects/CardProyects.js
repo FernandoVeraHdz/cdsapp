@@ -33,7 +33,7 @@ export default function CardProyects() {
   const getMyproyects = async (id) => {
     try {
       const response = await fetch(
-        `http://192.168.68.117:8080/cds/person/` + id
+        `http://192.168.52.130:8080/cds/person/` + id
       );
       const respuesta = await response.json();
       const data = respuesta.data;
