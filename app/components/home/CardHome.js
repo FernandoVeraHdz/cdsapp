@@ -8,6 +8,7 @@ export default function CardHome({
   emailP,
   emailIn,
   direccion,
+  modifier
 }) {
   return (
     <Card containerStyle={styles.card}>
@@ -18,7 +19,7 @@ export default function CardHome({
           containerStyle={styles.btnContainer}
           buttonStyle={{ backgroundColor: "#0368C0" }}
           icon={<Icon name="add" size={45} color="white" />}
-          onPress={() => navigation.navigate("skills", { perid: datos.id })}
+          onPress={() => navigation.navigate("update", { person:modifier })}
         />
       </View>
       <View style={styles.container2}></View>
@@ -120,4 +121,21 @@ const styles = StyleSheet.create({
     top: 0,
     height: 300,
   },
+  containerplus: {
+    flexDirection: "row",
+    position: "absolute",
+    right: 0,
+    bottom: 80,
+  },
+  button: {
+    marginTop: 20,
+    width: 60,
+    backgroundColor: "#0368C0",
+    color: "#0368C0",
+  },
+  btnContainer: {
+    marginTop: 10,
+    marginEnd: 5,
+  },
+
 });

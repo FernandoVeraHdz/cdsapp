@@ -1,6 +1,17 @@
+import { StyleSheet, Text, View } from 'react-native'
+import React,{useState} from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Button,Input,Icon } from "react-native-elements";
+import { isEmpty } from "lodash";
+
 export default function UpdateUser({ navigation, route }) {
-  const { perid } = route.params;
-  const [formData, setFormData] = useState({ description: "" });
+  const { person } = route.params;
+  const [formData, setFormData] = useState({ 
+    name:`${person.name}`,
+    lastname:`${person.lastname}`,
+    motherslastname:`${person.motherslastname}`,
+    emailInstitutional:`${person.emailInstitutional}` });
   const [error, setError] = useState({ description: "" });
   const url = "http://192.168.52.130:8080/cds/person/" + perid + "/skills";
   const change = (event, type) => {
@@ -59,28 +70,98 @@ export default function UpdateUser({ navigation, route }) {
           label="Apellido Materno"
           containerStyle={styles.containerInput}
           labelStyle={styles.labelInput}
-          onChange={(event) => change(event, "description")}
+          onChange={(event) => change(event, "motherslastname")}
           errorMessage={error.description}
         />
         <Input
-          label="Correo Institucional"
+          label="Email Institucional"
           containerStyle={styles.containerInput}
           labelStyle={styles.labelInput}
-          onChange={(event) => change(event, "description")}
+          onChange={(event) => change(event, "emailInstitutional")}
           errorMessage={error.description}
         />
         <Input
-          label="Correo Personal"
+          label="Email Personal"
           containerStyle={styles.containerInput}
           labelStyle={styles.labelInput}
-          onChange={(event) => change(event, "description")}
+          onChange={(event) => change(event, "email")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Celular"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "cellphone")}
           errorMessage={error.description}
         />
         <Input
           label="Telefono"
           containerStyle={styles.containerInput}
           labelStyle={styles.labelInput}
-          onChange={(event) => change(event, "description")}
+          onChange={(event) => change(event, "phone")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Matricula"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "dni")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Escuela"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "scholl")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Calle"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "street")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="No Exterior"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "extNumber")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="No Interior"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "intNumber")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="C.P"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "postalCode")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Colonia"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "colonia")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Estado"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "estate")}
+          errorMessage={error.description}
+        />
+        <Input
+          label="Municipio"
+          containerStyle={styles.containerInput}
+          labelStyle={styles.labelInput}
+          onChange={(event) => change(event, "town")}
           errorMessage={error.description}
         />
         <Button

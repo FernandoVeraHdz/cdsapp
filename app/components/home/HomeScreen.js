@@ -14,6 +14,7 @@ export default function HomeScreen(props) {
   const [loading, setLoading] = useState(true);
   const [datos, setDatos] = useState({});
   const [persona, setPersona] = useState({});
+  const [update, setUpdate] = useState({});
 
   const session = async () => {
     try {
@@ -75,7 +76,19 @@ export default function HomeScreen(props) {
         address: direccion,
         skills: skills,
       };
-
+      const infoUpdate = {
+        id: id,
+        name: name,
+        lastname: lastname,
+        motherslastname: motherslastname,
+        cellphone: cellphone,
+        email: email,
+        emailInstitutional: emailInstitutional,
+        scholl: scholl,
+        address: { ...address },
+        skills: skills,
+      };
+      setUpdate(infoUpdate);
       setPersona(info);
     } catch (error) {
       console.log("Error: " + error);
@@ -96,6 +109,7 @@ export default function HomeScreen(props) {
         <Text style={styles.nombre}>{name}</Text>
 
         <CardHome
+          modifier={update}
           nombre={persona.name}
           celular={persona.cellphone}
           emailP={persona.email}

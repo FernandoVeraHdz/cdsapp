@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Home from '../screens/Home';
 import Skills from '../components/home/Skills'
 import Webpdf from "../screens/Webpdf";
+import UpdateUser from '../components/home/UpdateUser'
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,11 @@ export default function HomeStack() {
         name="skills"
         component={Skills}
         options={{ title: "Habilidades" }}
+      />
+      <Stack.Screen
+        name="update"
+        component={UpdateUser}
+        options={{ title: "Actualizar Información" }}
       />
       <Stack.Screen
         name="webpdf"
