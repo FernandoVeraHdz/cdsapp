@@ -1,52 +1,70 @@
-import React,{useState,useEffect} from "react";
-import { View, ScrollView, StyleSheet, Image , ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { Text, Card, Button, Icon, SearchBar } from "react-native-elements";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import CardProjectos from "./CardProjectos";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProjectScreen() {
-  const [isLoading,setLoading] = useState(true)
-  const [datos,setDatos] = useState([])
+  const [isLoading, setLoading] = useState(true);
+  const [datos, setDatos] = useState([]);
+  const [usuario, setUsuario] = useState({});
 
-  const getProyectos = async ()=>{
-    try{
-      const response = await
-      fetch('http://192.168.1.72:8080/cds/proyectos/')
-      const json = await response.json();
-      setDatos(json)
-    }catch(error){
-      console.log("Error: "+error)
-    }finally{
-      setLoading(false)
+  const session = async () => {
+    try {
+      const usuario = await AsyncStorage.getItem("@session");
+      if (usuario !== null) {
+        const person = JSON.parse(usuario);
+        console.log("aqui estan los datos" + usuario);
+        setUsuario(person);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      getProyectos();
     }
-  }
+  };
 
-  const {data}=datos
+  useEffect(() => {
+    session();
+  }, []);
+  const { id, name } = usuario;
 
-  let i=0
-  let proyecto = []
-  for(i in data){
-    proyecto.push(data[i])
-  }
-  console.log(proyecto)
-
-
-  useEffect(()=>{
-    getProyectos()
-  },[])
+  const getProyectos = async () => {
+    try {
+      const response = await fetch("http://192.168.68.117:8080/cds/proyectos/");
+      const json = await response.json();
+      setDatos(json.data);
+    } catch (error) {
+      console.log("Error: " + error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <View style={{flex: 1, justifyContent:"center", alignItems:"center"}}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <LinearGradient
-                colors={['rgba(39,103,187,1) 10.4%', 'transparent']}
-                style={styles.background}
-             />
+        colors={["rgba(39,103,187,1) 10.4%", "transparent"]}
+        style={styles.background}
+      />
       <ScrollView>
-      {proyecto.map((proyecto,i)=>{
-          return(
-            <CardProjectos key={i} titulo={proyecto.name} description={proyecto.description}/>
-          )
+        {datos.map((proyecto, i) => {
+          return (
+            <CardProjectos
+              key={i}
+              titulo={proyecto.name}
+              description={proyecto.description}
+              idpro={proyecto.id}
+              idu={id}
+            />
+          );
         })}
       </ScrollView>
     </View>
@@ -59,8 +77,8 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     width: 370,
     height: 120,
-    marginRight:10,
-    marginLeft:10
+    marginRight: 10,
+    marginLeft: 10,
   },
   styleText: {
     backgroundColor: "#0368C0",
@@ -79,8 +97,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  btnContainer:{
-    marginTop: 10
+  btnContainer: {
+    marginTop: 10,
   },
   titletext: {
     backgroundColor: "#0368C0",
@@ -89,10 +107,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   background: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     top: 0,
     height: 300,
-  }
+  },
 });

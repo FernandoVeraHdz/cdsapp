@@ -2,47 +2,65 @@ import { isEmpty } from "lodash";
 import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Input, Button, Icon } from "react-native-elements";
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function LoginForm(props) {
-  const { setReload, setExitsSession, navigation, toastRef } = props;
-  console.log("props en login", props);
-
+export default function LoginForm({
+  setReload,
+  setExitsSession,
+  navigation,
+  toastRef,
+}) {
   const [showPassword, setShowPassword] = useState(true);
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [error, setError] = useState({ username: "", password: "" });
   const change = (event, type) => {
     setFormData({ ...formData, [type]: event.nativeEvent.text });
   };
+  const url = "http://192.168.68.117:8080/cds/auth/login";
 
-  const myLogin =  async () => {
-
-    if (isEmpty(formData.email) || isEmpty(formData.password)) {
+  const myLogin = async () => {
+    if (isEmpty(formData.username) || isEmpty(formData.password)) {
       setError({
         email: "Campo obligatorio",
         password: "Campo obligatorio",
       });
     } else {
       setError({
-        email: "",
+        username: "",
         password: "",
       });
       setShowPassword(true);
-    }
 
-    try{
-      await AsyncStorage.setItem("@session", "iwano")
-      setReload(true)
-    }catch(e){
-      console.log("err", e);
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+          },
+          body: JSON.stringify(formData),
+        });
+        const respuesta = await response.json();
+        const token = respuesta.data.token;
+        const usuario = respuesta.data.user;
+        const { username, person } = usuario;
+        const persona = { id: person.id, name: person.name };
+        const user = { token: token, username: username, ...persona };
+        try {
+          await AsyncStorage.setItem("@session", JSON.stringify(user));
+          setReload(true);
+        } catch (e) {
+          console.log("err", e);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.texto}>Bienvenido</Text>
       <Text style={styles.texto2}>Iniciar Sesión</Text>
-
       <Input
         keyboardType="email-address"
         label="Usuario"
@@ -57,8 +75,8 @@ export default function LoginForm(props) {
         containerStyle={styles.containerInput}
         labelStyle={styles.labelInput}
         placeholder="becariocds015@gmail.com"
-        onChange={(event) => change(event, "email")}
-        errorMessage={error.email}
+        onChange={(event) => change(event, "username")}
+        errorMessage={error.username}
       />
 
       <Input
@@ -93,7 +111,6 @@ export default function LoginForm(props) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

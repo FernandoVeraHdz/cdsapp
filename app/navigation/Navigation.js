@@ -11,7 +11,8 @@ import ProjectsStack  from "./ProjectsStack"
 
 const Tab =createBottomTabNavigator();
 
-export default function Navigation() {
+export default function Navigation({setReload, setExitsSession}) {
+  console.log(`aqui esta el si existe sesion ${setExitsSession}`)
   return (
     <NavigationContainer >
         <Tab.Navigator 
@@ -25,19 +26,16 @@ export default function Navigation() {
                
           })}
         >
-
           <Tab.Screen 
               name="home"
               component={HomeStack}
               options={{title:"Inicio"}}
           />
-
           <Tab.Screen 
               name="projects"
               component={ProjectsStack }
               options={{title:"Proyectos"}}
           />  
-
           <Tab.Screen 
               name="myProjects"
               component={MyProjectsStack }
@@ -48,6 +46,7 @@ export default function Navigation() {
               name="profile"
               component={ProfileStack }
               options={{title:"Perfil"}}
+              initialParams={{setReload: setReload, setExitsSession: setExitsSession}}
           />
         </Tab.Navigator>
     </NavigationContainer>

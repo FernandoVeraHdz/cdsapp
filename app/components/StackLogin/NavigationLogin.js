@@ -8,12 +8,10 @@ import { Icon } from 'react-native-elements'
 
 const Tab =createBottomTabNavigator();
 
-export default function NavigationLogin(props) {
-  const {setReload, setExitsSession} = props;
+export default function NavigationLogin({setReload, setExitsSession}) {
     return (
         <NavigationContainer>
             <Tab.Navigator 
-              
               initialRouteName="Login"
               screenOptions={({route})=>({
                 tabBarIcon: ({color}) => screenOptions(route, color),
@@ -24,14 +22,12 @@ export default function NavigationLogin(props) {
                    
               })}
             >
-    
               <Tab.Screen 
                   name="Login"
                   component={LoginStack}
                   options={{title:"Iniciar Sesión"}}
                   initialParams={{setReload: setReload, setExitsSession: setExitsSession}}
               />
-    
               <Tab.Screen 
                   name="ForgotPassword"
                   component={ForgotPassword }

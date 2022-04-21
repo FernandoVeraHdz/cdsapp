@@ -1,12 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View } from 'react-native';
-import CardsProyects from "../components/miProyects/CardProyects";
+import CardProyects from "../components/miProyects/CardProyects";
 
-export default function MyProjects(){
-
-  return(
+export default function MyProjects() {
+  return (
     <View style={styles.container}>
-        <CardsProyects/>
+      <CardProyects />
     </View>
   );
 }

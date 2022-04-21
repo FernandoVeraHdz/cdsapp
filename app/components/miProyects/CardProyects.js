@@ -3,36 +3,46 @@ import { Card, LinearProgress } from "react-native-elements";
 import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import CardProject from "./CardProject";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function CardsProyects() {
-  const [isLoading,setLoading] = useState(true)
-  const [datos,setDatos] = useState([])
+export default function CardProyects() {
+  const [isLoading, setLoading] = useState(true);
+  const [datos, setDatos] = useState([]);
+  const [usuario, setUsuario] = useState({});
+  const [proyectos, setProyectos] = useState([]);
 
-  const getProyectos = async ()=>{
-    try{
-      const response = await
-      fetch('http://192.168.1.72:8080/cds/proyectos/')
-      const json = await response.json();
-      setDatos(json)
-    }catch(error){
-      console.log("Error: "+error)
-    }finally{
-      setLoading(false)
+  const session = async () => {
+    try {
+      const usuario = await AsyncStorage.getItem("@session");
+      if (usuario !== null) {
+        const person = JSON.parse(usuario);
+        setUsuario(person);
+        const { id } = person;
+        getMyproyects(id);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
     }
-  }
+  };
 
-  const {data}=datos
+  useEffect(() => {
+    session();
+  }, []);
 
-  let i=0
-  let proyecto = []
-  for(i in data){
-    proyecto.push(data[i])
-  }
-
-
-  useEffect(()=>{
-    getProyectos()
-  },[])
+  const getMyproyects = async (id) => {
+    try {
+      const response = await fetch(
+        `http://192.168.68.117:8080/cds/person/` + id
+      );
+      const respuesta = await response.json();
+      const data = respuesta.data;
+      const { skills, projects } = data;
+      setProyectos(projects);
+    } catch (error) {
+      console.log(`este es el error ${error}`);
+    }
+  };
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -41,10 +51,14 @@ export default function CardsProyects() {
         style={styles.background}
       />
       <ScrollView>
-        {proyecto.map((proyecto,i)=>{
-          return(
-            <CardProject key={i} titulo={proyecto.name} description={proyecto.description}/>
-          )
+        {proyectos.map((proyecto, i) => {
+          return (
+            <CardProject
+              key={i}
+              titulo={proyecto.name}
+              description={proyecto.description}
+            />
+          );
         })}
       </ScrollView>
     </View>

@@ -7,7 +7,7 @@ const Stack=createStackNavigator();
 
 export default function LoginStack(props) {
     const {route}=props
-    console.log(route);
+    
     const {setReload, setExitsSession} = route.params
     return (
         <Stack.Navigator

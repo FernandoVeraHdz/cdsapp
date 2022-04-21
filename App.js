@@ -25,5 +25,5 @@ export default function App() {
     }
     setReload(false)
   },[reload])
-  return exitsSesion ? <Navigation/> :  <NavigationLogin  setReload={setReload} setExitsSession={setExitsSession} />
+  return exitsSesion ? <Navigation setReload={setReload} setExitsSession={setExitsSession}/> :  <NavigationLogin  setReload={setReload} setExitsSession={setExitsSession} />
 }

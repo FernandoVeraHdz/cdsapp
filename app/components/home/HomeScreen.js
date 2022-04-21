@@ -1,124 +1,168 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import React,{useState,useEffect} from 'react'
-import {Card, Button,Icon} from "react-native-elements"
-import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import CardHome from './CardHome';
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { WebView } from "react-native-webview";
+import React, { useState, useEffect } from "react";
+import { Card, Button, Icon } from "react-native-elements";
+import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CardHome from "./CardHome";
+import Loading from "../Loading";
 
 export default function HomeScreen(props) {
-  const [isLoading,setLoading] = useState(true)
-  const [datos,setDatos] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [datos, setDatos] = useState({});
+  const [persona, setPersona] = useState({});
 
-  const getInfo = async () => {
-    try{
-      const response = await
-      fetch('http://192.168.1.72:8080/cds/person/')
-      const json = await response.json();
-      setDatos(json)
-    }catch(error){
-      console.log("Error: "+error)
-    }finally{
-      setLoading(false)
+  const session = async () => {
+    try {
+      const usuario = await AsyncStorage.getItem("@session");
+      if (usuario !== null) {
+        const person = JSON.parse(usuario);
+        setDatos(person);
+        const { id } = person;
+        getInfo(id);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    session();
+  }, []);
+  const { name } = datos;
+  const getInfo = async (id) => {
+    try {
+      const response = await fetch(
+        `http://192.168.68.117:8080/cds/person/` + id
+      );
+      const respuesta = await response.json();
+      const data = respuesta.data;
+      const {
+        name,
+        lastname,
+        motherslastname,
+        cellphone,
+        email,
+        emailInstitutional,
+        scholl,
+        address,
+        skills,
+      } = data;
+
+      const { street, extNumber, colonia, postalCode, town, estate } = address;
+
+      const direccion =
+        street +
+        " " +
+        extNumber +
+        " " +
+        colonia +
+        " " +
+        postalCode +
+        " " +
+        town +
+        " " +
+        estate;
+
+      const nombre = name + " " + lastname + " " + motherslastname;
+      const info = {
+        name: nombre,
+        cellphone: cellphone,
+        email: email,
+        emailInstitutional: emailInstitutional,
+        scholl: scholl,
+        address: direccion,
+        skills: skills,
+      };
+
+      setPersona(info);
+    } catch (error) {
+      console.log("Error: " + error);
+    } finally {
+      setLoading(false);
     }
-  }
-  const {data}=datos
+  };
 
-  let i=0
-  let informacion = []
-  for(i in data){
-    informacion.push(data[i])
-  }
-
-
-  useEffect(()=>{
-    getInfo()
-  },[])
-  
-
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   return (
-    <View  style={{flex: 1, justifyContent:"center", alignItems:"center"}}>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <LinearGradient
-              // Background Linear Gradient
-                colors={['rgba(39,103,187,1) 10.4%', 'transparent']}
-                style={styles.background}
-             />
+        colors={["rgba(39,103,187,1) 10.4%", "transparent"]}
+        style={styles.background}
+      />
       <ScrollView>
-
         <Text style={styles.titulo}>Bienvenido</Text>
-        <Text style={styles.nombre}>Alexander Machado</Text>
-          <CardHome key={i} nombre={informacion.name} celular={informacion.cellphone}
-                    emailP={informacion.email} emailIn={informacion.emailInstitutional}
-                    direccion={informacion.phone}
-          />
-          <Card containerStyle={styles.card2}>
-              <Card.Title style={styles.cardTitle} >Información académica</Card.Title>
-              <Card.Divider/>
-              <View style={styles.container}>
-             </View>
-              <Text style={styles.styleText}>Universidad Tecnológica UTEZ</Text>
-              
-          </Card>
+        <Text style={styles.nombre}>{name}</Text>
 
-          <Card containerStyle={styles.card3}>
-          
-             <Card.Title style={styles.cardTitle}>Habilidades</Card.Title>
-             <View style={styles.container}>
-                  <Button
-                    style={styles.button}
-                    containerStyle={styles.btnContainer}
-                    buttonStyle={{ backgroundColor: "#0368C0" }}
-                    icon={
-                    <Icon 
-                      type="material-community" 
-                      name="plus" 
-                      size={30}
-                      color="#0CCDAC" />
-                     
-                    }
-                    onPress={() => navigation.navigate("skills")}
-                  />
-                </View>
-              <Card.Divider/>
-              <View style={styles.container}>
-              </View>
-              <Text style={styles.styleText}>Java</Text>
-              <Text style={styles.styleText}>JS</Text>
-              <Text style={styles.styleText}>HTML</Text>
-              <Text style={styles.styleText}>MySql</Text>
-               
-          </Card>
-          <Button 
-            title="Generar CV"
-            containerStyle={styles.btnContainer3}
-            buttonStyle={styles.btn3}
-            icon={
-              <Icon type="material-community"
-                  name="file-document-outline"
-                  size={20}
-                  color="#FFF"
-                  
-              />
-            }
-             
-            
+        <CardHome
+          nombre={persona.name}
+          celular={persona.cellphone}
+          emailP={persona.email}
+          emailIn={persona.emailInstitutional}
+          direccion={persona.address}
+        />
+        <Card containerStyle={styles.card2}>
+          <Card.Title style={styles.cardTitle}>
+            Información académica
+          </Card.Title>
+          <View style={styles.container}></View>
+          <Text style={styles.styleText}>Universidad {persona.scholl}</Text>
+        </Card>
+
+        <Card containerStyle={styles.card3}>
+          <Card.Title style={styles.cardTitle}>Habilidades</Card.Title>
+          <View style={styles.containerplus}>
+            <Button
+              style={styles.button}
+              containerStyle={styles.btnContainer}
+              buttonStyle={{ backgroundColor: "#0368C0" }}
+              icon={<Icon name="add" size={45} color="white" />}
+              onPress={() => navigation.navigate("skills", { perid: datos.id })}
             />
-
+          </View>
+          <View style={styles.container}></View>
+          <ScrollView style={{ height: "80%" }}>
+            {persona.skills ? (
+              persona.skills.map((skill, i) => {
+                return (
+                  <Text key={i} style={styles.styleText}>
+                    {skill.description}
+                  </Text>
+                );
+              })
+            ) : (
+              <Text style={styles.styleText}>cargando datos</Text>
+            )}
+          </ScrollView>
+        </Card>
+        <Button
+          title="Generar CV"
+          containerStyle={styles.btnContainer3}
+          buttonStyle={styles.btn3}
+          icon={
+            <Icon
+              type="material-community"
+              name="file-document-outline"
+              size={20}
+              color="#FFF"
+            />
+          }
+          onPress={() => navigation.navigate("webpdf")}
+        />
       </ScrollView>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  titulo:{
+  titulo: {
     textAlign: "center",
     color: "#FFF",
-    fontSize:30,
+    fontSize: 30,
   },
-  nombre:{
+  nombre: {
     textAlign: "center",
     color: "#FFF",
-    fontSize:20,
+    fontSize: 20,
   },
   card: {
     backgroundColor: "#0368C0",
@@ -126,30 +170,30 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     width: 370,
     height: 200,
+    marginRight: 10,
   },
   card2: {
     backgroundColor: "#0368C0",
     borderRadius: 15,
     borderWidth: 0,
-    width: 370,
+    width: 390,
     height: 130,
   },
   card3: {
     backgroundColor: "#0368C0",
     borderRadius: 15,
     borderWidth: 0,
-    width: 370,
+    width: 390,
     height: 180,
   },
   styleText: {
     textAlign: "left",
     color: "#FFF",
-    
   },
-  cardTitle:{
+  cardTitle: {
     textAlign: "left",
     color: "#FFF",
-    fontSize:15,
+    fontSize: 15,
   },
   container: {
     flexDirection: "row",
@@ -157,13 +201,21 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 94,
   },
+  containerplus: {
+    flexDirection: "row",
+    position: "absolute",
+    right: 0,
+    bottom: 80,
+  },
   button: {
-    width: 30,
+    marginTop: 20,
+    width: 60,
     backgroundColor: "#0368C0",
     color: "#0368C0",
   },
-  btnContainer:{
-    marginTop: 10
+  btnContainer: {
+    marginTop: 10,
+    marginEnd: 5,
   },
 
   button2: {
@@ -171,8 +223,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#0368C0",
     color: "#0368C0",
   },
-  btnContainer2:{
-    marginTop: 10
+  btnContainer2: {
+    marginTop: 10,
   },
   container2: {
     flexDirection: "row",
@@ -183,20 +235,19 @@ const styles = StyleSheet.create({
   btn3: {
     color: "#FFF",
     backgroundColor: "#0CCDAC",
-    
   },
   btnContainer3: {
-    flex:1,
+    flex: 1,
     borderRadius: 30,
     width: "95%",
-    marginTop:10,
-    marginLeft:8
+    marginTop: 10,
+    marginLeft: 8,
   },
   background: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     top: 0,
     height: 300,
-  }
+  },
 });
