@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import {
   View,
   ScrollView,
@@ -10,6 +10,7 @@ import { Text, Card, Button, Icon, SearchBar } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import CardProjectos from "./CardProjectos";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loading from "./Loading";
 
 export default function ProjectScreen() {
   const [isLoading, setLoading] = useState(true);
@@ -25,6 +26,7 @@ export default function ProjectScreen() {
         setUsuario(person);
       }
     } catch (error) {
+      
       console.log(error);
     } finally {
       getProyectos();

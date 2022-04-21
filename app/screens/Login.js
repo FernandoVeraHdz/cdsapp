@@ -1,16 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, Text, View } from 'react-native';
 import LoginForm from "../components/profile/LoginForm"
 import Toast from 'react-native-easy-toast'
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from "react-native-elements";
+import Loading from "../components/Loading"
 
 export default function Login(props){
   const {setReload, setExitsSession} = props.route.params
   const navigation = useNavigation();
   const toastRef = useRef();
+  const [loading, setLoading] = useState(false);
   return(  
     <View style={styles.container}>
     <LinearGradient
@@ -28,8 +30,11 @@ export default function Login(props){
         setReload={setReload}
         setExitsSession={setExitsSession}
         navigation={navigation}
-        toastRef={toastRef}
+        toastRef={toastRef} setLoading={setLoading}
       />
+      <Loading isVisible={loading} text="Cargando sesion"/>
+      <Toast ref={toastRef} opacity={0.9} position="center" />
+
     </ScrollView>
     <Toast ref={toastRef} opacity={0.9} position="center" />
   </View>

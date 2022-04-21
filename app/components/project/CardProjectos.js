@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, {useState, useRef} from 'react'
 import { Button, Card, Icon } from 'react-native-elements'
+import Toast from 'react-native-easy-toast'
+import Loading from "../Loading"
 
 
 export default function CardProjectos({ titulo, description, idpro, idu }) {
+  const toastRef = useRef()
+  const [loading, setLoading] = useState(false)
+
   const sendProyecto = async () => {
     console.log("ENTRE A LA FUNCION");
     const url =
@@ -30,7 +35,10 @@ export default function CardProjectos({ titulo, description, idpro, idu }) {
           buttonStyle={{ backgroundColor: "#0368C0" }}
           icon={<Icon name="check" size={25} color="white" />}
           onPress={() => sendProyecto()}
+          toastRef={toastRef} setLoading={setLoading}
         />
+        <Loading isVisible={loading} text="Agregando Proyecto" />
+        <Toast ref={toastRef} opacity={0.9} position="center" />
       </View>
     </Card>
   );

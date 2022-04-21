@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { WebView } from "react-native-webview";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, Button, Icon } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
@@ -9,6 +9,7 @@ import CardHome from "./CardHome";
 import Loading from "../Loading";
 
 export default function HomeScreen(props) {
+  const toastRef = useRef()
   const [loading, setLoading] = useState(true);
   const [datos, setDatos] = useState({});
   const [persona, setPersona] = useState({});
@@ -147,7 +148,10 @@ export default function HomeScreen(props) {
             />
           }
           onPress={() => navigation.navigate("webpdf")}
+          toastRef={toastRef} setLoading={setLoading}
         />
+        <Loading isVisible={loading} text="Descargando CV"/>
+        <Toast ref={toastRef} opacity={0.9} position="center" />
       </ScrollView>
     </View>
   );
